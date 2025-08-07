@@ -1,0 +1,17 @@
+1. Data sent from supplier
+    a. Large tiff files
+    b. text files with description
+2. Process incoming Data
+    a. Convert tiff files to smaller jpeg
+        1. Size: Change image resolution from 3000x2000 to 600x400 pixel
+        2. Format: Change image format from .TIFF to .JPEG
+    b. Convert text files to HTML
+3. Upload
+    a. Name and weight of all fruit to Django
+    b. Update website with images and descriptions
+4. supplier should be notified with an email 
+    a. Indicates the total weight of fruit (in lbs) that were uploaded.
+    b. PDF attached with the name of the fruit and its total weight (in lbs)
+5. Run monitoring on system
+    a. Check health of system
+    b. send email alert if someting goes wrong
