@@ -14,8 +14,7 @@
 import shutil
 import psutil
 import socket
-import smtplib
-from email.message import EmailMessage 
+from emails import generate_email, send
 
 def check_system_stats():
     # Check CPU usage
@@ -25,8 +24,9 @@ def check_system_stats():
 
     # Check available disk space
     disk_usage = shutil.disk_usage('/')
-    free_disk_space = disk_usage.free / (1024 * 1024 * 1024)  # Convert to GB
-    if free_disk_space < 20:
+    # free_disk_space = disk_usage.free / (1024 * 1024 * 1024)  # Convert to GB
+    free_percentage = (disk_usage.free / disk_usage.total) * 100
+    if free_percentage < 20:
         return "Error - Available disk space is less than 20%"
 
     # Check available memory
@@ -42,23 +42,6 @@ def check_system_stats():
     
     return None
 
-def generate_email(sender, recipient, subject, body):
-  """Creates an email with an attachement."""
-  # Basic Email formatting
-  message = email.message.EmailMessage()
-  message["From"] = sender
-  message["To"] = recipient
-  message["Subject"] = subject
-  message.set_content(body)
-
-
-  return message
-
-def send_email(message):
-  """Sends the message to the configured SMTP server."""
-  mail_server = smtplib.SMTP('localhost')
-  mail_server.send_message(message)
-  mail_server.quit()
 
 if __name__ == "__main__":
     # Define email parameters
@@ -69,4 +52,7 @@ if __name__ == "__main__":
     
     if check_system_stats() != None:
         print("System check failed. Sending email notification.")
+        email_message = generate_email(sender, recipient, subject, body)
+        send(email_message)
+
     
