@@ -6,11 +6,28 @@ Uploads them to web server
 '''
 
 import requests
+import os
 
-# This example shows how a file can be uploaded using
-# The Python Requests module
+
+# Takes in directory
+def process_directory(directory):
+    for filename in os.listdir(directory):
+        if filename.endswith('.jpeg'):
+            upload_image(os.path.join(directory, filename))
+
+def upload_image(image_path):
+    with open(image_path, 'rb') as img_file:
+        file = {'file': img_file}
+        response = requests.post(url, files=file)
+        if response.status_code == 201:
+            print(f"Uploaded {image_path} successfully.")
+        else:
+            print(f"Failed to upload {image_path}. Status code: {response.status_code}")
 
 url = "http://localhost/upload/"
-with open('/usr/share/apache2/icons/icon.sheet.png', 'rb') as opened:
-    r = requests.post(url, files={'file': opened})
+img_directory = './supplier-data/images' 
+
+process_directory(img_directory)
+print("Image upload complete.")
+
 
